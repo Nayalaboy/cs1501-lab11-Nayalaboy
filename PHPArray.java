@@ -54,7 +54,18 @@ public class PHPArray<V> implements Iterable<V> {
     entries[i] = new Node<V>(key, val);
     //insert the node into the linked list
     // TODO: Insert the node into the doubly linked list in O(1) time
+   entries[i].key=key;
+   entries[i].value=val;
 
+   if (N==0) {
+     head = entries[i];
+     tail = head;
+     entries[i] = head;
+   }else{
+     tail.next=entries[i];
+     entries[i].prev=tail;
+     tail=entries[i];
+}
     N++;
   }
 
@@ -84,7 +95,25 @@ public class PHPArray<V> implements Iterable<V> {
 
   // rehash a node while keeping it in place in the linked list
   private void rehash(Node<V> node){
-    // TODO Write the implementation of this function
+    int i;
+
+    String key;
+
+    for (i = hash(node.key); entries[i] != null; i = (i + 1) % M) {
+
+      // update the value if key already exists
+
+      if (entries[i].key.equals(node.key)) {
+
+        entries[i].value = node.value;
+
+        return;
+
+      }
+
+      // TODO Write the implementation of this function
+  }
+    entries[i]=node;
   }
 
   // delete the key (and associated value) from the symbol table
@@ -100,6 +129,16 @@ public class PHPArray<V> implements Iterable<V> {
     // delete node from hash table
     Node<V> toDelete = entries[i];
     entries[i] = null;
+
+    if (tail==toDelete){
+      tail=toDelete.prev;
+    }else if (head==toDelete){
+      head=toDelete.next;
+    }else if (toDelete.prev!=null) {
+      toDelete.prev.next = toDelete.next;
+    } else if (toDelete.next!=null) {
+      toDelete.next.prev=toDelete.prev;
+    }
     // TODO: delete the node from the linked list in O(1)
 
 
